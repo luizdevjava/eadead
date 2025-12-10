@@ -73,6 +73,9 @@ export default function AdminDashboardPage() {
               <Link href="/admin/aulas" className="text-slate-600 hover:text-blue-600 transition-colors">
                 Aulas
               </Link>
+              <Link href="/admin/banners" className="text-slate-600 hover:text-blue-600 transition-colors">
+                Banners
+              </Link>
               <Link href="/admin/usuarios" className="text-slate-600 hover:text-blue-600 transition-colors">
                 Usuários
               </Link>
@@ -248,6 +251,12 @@ export default function AdminDashboardPage() {
                     Nova Aula
                   </Button>
                 </Link>
+                <Link href="/admin/banners">
+                  <Button variant="outline" className="w-full justify-start">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Gerenciar Banners
+                  </Button>
+                </Link>
                 <Link href="/admin/usuarios">
                   <Button variant="outline" className="w-full justify-start">
                     <Users className="w-4 h-4 mr-2" />
@@ -260,10 +269,6 @@ export default function AdminDashboardPage() {
                     Configurar Curso
                   </Button>
                 </Link>
-                <Button variant="outline" className="w-full justify-start">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Ver Relatórios
-                </Button>
               </div>
             </CardContent>
           </Card>

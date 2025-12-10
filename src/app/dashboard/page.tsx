@@ -2,15 +2,26 @@
 
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { BannerContainer } from "@/components/banner"
 import { BookOpen, Clock, CheckCircle, PlayCircle, TrendingUp } from "lucide-react"
 import Link from "next/link"
+
+interface Banner {
+  id: string
+  title: string
+  description?: string
+  imageUrl: string
+  linkUrl?: string
+  position: "TOP" | "SIDEBAR" | "BOTTOM"
+}
 
 export default function DashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [banners, setBanners] = useState<Banner[]>([])
 
   useEffect(() => {
     if (status === "loading") return
@@ -18,6 +29,32 @@ export default function DashboardPage() {
       router.push("/login")
     }
   }, [session, status, router])
+
+  useEffect(() => {
+    // Mock data - substituir com chamada API real
+    const mockBanners: Banner[] = [
+      {
+        id: "1",
+        title: "🔥 Promoção Especial - 50% OFF",
+        description: "Aproveite nossa promoção de lançamento! Matricule-se agora com 50% de desconto.",
+        imageUrl: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=300&fit=crop",
+        linkUrl: "https://eadfacil.com/promo",
+        position: "TOP"
+      },
+      {
+        id: "2",
+        title: "📚 Novo Curso Disponível",
+        description: "Conheça nosso novo curso de Marketing Avançado!",
+        imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop",
+        linkUrl: "https://eadfacil.com/novo-curso",
+        position: "SIDEBAR"
+      }
+    ]
+
+    setTimeout(() => {
+      setBanners(mockBanners)
+    }, 1000)
+  }, [])
 
   if (status === "loading") {
     return (
@@ -76,73 +113,80 @@ export default function DashboardPage() {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            Bem-vindo de volta, {session.user?.name}!
-          </h1>
-          <p className="text-slate-600">
-            Continue aprendendo e acompanhe seu progresso
-          </p>
-        </div>
+        {/* Banners no topo */}
+        <BannerContainer 
+          banners={banners} 
+          position="TOP" 
+          className="mb-8"
+        />
 
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Aulas Concluídas</CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">12</div>
-              <p className="text-xs text-slate-600">
-                +2 esta semana
+        <div className="grid lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
+                Bem-vindo de volta, {session.user?.name}!
+              </h1>
+              <p className="text-slate-600">
+                Continue aprendendo e acompanhe seu progresso
               </p>
-            </CardContent>
-          </Card>
+            </div>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Horas de Estudo</CardTitle>
-              <Clock className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">8.5</div>
-              <p className="text-xs text-slate-600">
-                +1.5 esta semana
-              </p>
-            </CardContent>
-          </Card>
+            {/* Stats Cards */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Aulas Concluídas</CardTitle>
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">12</div>
+                  <p className="text-xs text-slate-600">
+                    +2 esta semana
+                  </p>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Progresso</CardTitle>
-              <TrendingUp className="h-4 w-4 text-purple-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">25%</div>
-              <p className="text-xs text-slate-600">
-                12 de 48 aulas
-              </p>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Horas de Estudo</CardTitle>
+                  <Clock className="h-4 w-4 text-blue-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">8.5</div>
+                  <p className="text-xs text-slate-600">
+                    +1.5 esta semana
+                  </p>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Próxima Aula</CardTitle>
-              <PlayCircle className="h-4 w-4 text-orange-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">Módulo 3</div>
-              <p className="text-xs text-slate-600">
-                SEO para Google
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Progresso</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-purple-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">25%</div>
+                  <p className="text-xs text-slate-600">
+                    12 de 48 aulas
+                  </p>
+                </CardContent>
+              </Card>
 
-        {/* Current Course */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Próxima Aula</CardTitle>
+                  <PlayCircle className="h-4 w-4 text-orange-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">Módulo 3</div>
+                  <p className="text-xs text-slate-600">
+                    SEO para Google
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Current Course */}
             <Card>
               <CardHeader>
                 <CardTitle>Marketing Digital Completo</CardTitle>
@@ -179,9 +223,44 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Recent Activity */}
+            <div className="mt-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Atividade Recente</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      { action: "Concluiu aula", detail: "Módulo 2 - Introdução ao Marketing Digital", time: "2 horas atrás" },
+                      { action: "Iniciou aula", detail: "Módulo 3 - SEO para Google", time: "1 dia atrás" },
+                      { action: "Concluiu módulo", detail: "Módulo 1 - Fundamentos", time: "3 dias atrás" }
+                    ].map((activity, index) => (
+                      <div key={index} className="flex items-center gap-4 p-3 bg-slate-50 rounded-lg">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-slate-900">{activity.action}</p>
+                          <p className="text-sm text-slate-600">{activity.detail}</p>
+                        </div>
+                        <span className="text-xs text-slate-500">{activity.time}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
-          <div>
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            {/* Banner na sidebar */}
+            <BannerContainer 
+              banners={banners} 
+              position="SIDEBAR" 
+              className="mb-6"
+            />
+
             <Card>
               <CardHeader>
                 <CardTitle>Próximas Aulas</CardTitle>
@@ -209,32 +288,12 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="mt-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Atividade Recente</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[
-                  { action: "Concluiu aula", detail: "Módulo 2 - Introdução ao Marketing Digital", time: "2 horas atrás" },
-                  { action: "Iniciou aula", detail: "Módulo 3 - SEO para Google", time: "1 dia atrás" },
-                  { action: "Concluiu módulo", detail: "Módulo 1 - Fundamentos", time: "3 dias atrás" }
-                ].map((activity, index) => (
-                  <div key={index} className="flex items-center gap-4 p-3 bg-slate-50 rounded-lg">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-slate-900">{activity.action}</p>
-                      <p className="text-sm text-slate-600">{activity.detail}</p>
-                    </div>
-                    <span className="text-xs text-slate-500">{activity.time}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Banner no rodapé */}
+        <BannerContainer 
+          banners={banners} 
+          position="BOTTOM" 
+          className="mt-8"
+        />
       </div>
     </div>
   )

@@ -176,9 +176,46 @@ async function main() {
     })
   ])
 
+  // Criar banners de exemplo
+  await Promise.all([
+    prisma.banner.create({
+      data: {
+        title: '🔥 Promoção Especial - 50% OFF',
+        description: 'Aproveite nossa promoção de lançamento! Matricule-se agora com 50% de desconto.',
+        imageUrl: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=300&fit=crop',
+        linkUrl: 'https://eadfacil.com/promo',
+        isActive: true,
+        position: 'TOP',
+        startDate: new Date(),
+        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dias
+      }
+    }),
+    prisma.banner.create({
+      data: {
+        title: '📚 Novo Curso Disponível',
+        description: 'Conheça nosso novo curso de Marketing Avançado!',
+        imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop',
+        linkUrl: 'https://eadfacil.com/novo-curso',
+        isActive: true,
+        position: 'SIDEBAR'
+      }
+    }),
+    prisma.banner.create({
+      data: {
+        title: '🎓 Certificado Gratuito',
+        description: 'Garanta seu certificado ao concluir qualquer curso!',
+        imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=200&fit=crop',
+        linkUrl: 'https://eadfacil.com/certificados',
+        isActive: true,
+        position: 'BOTTOM'
+      }
+    })
+  ])
+
   console.log('Seed concluído com sucesso!')
   console.log('Usuário admin: admin@eadfacil.com / admin123')
   console.log('Usuário estudante: student@eadfacil.com / student123')
+  console.log('Banners criados: 3 banners de exemplo')
 }
 
 main()

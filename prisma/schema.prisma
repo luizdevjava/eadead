@@ -112,6 +112,22 @@ model Subscription {
   @@map("subscriptions")
 }
 
+model Banner {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String     @map("image_url")
+  linkUrl     String?     @map("link_url")
+  isActive    Boolean     @default(true) @map("is_active")
+  position    BannerPosition @default(TOP) @map("position")
+  startDate   DateTime?   @map("start_date")
+  endDate     DateTime?   @map("end_date")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("banners")
+}
+
 model Post {
   id        String   @id @default(cuid())
   title     String
@@ -136,4 +152,10 @@ enum SubscriptionStatus {
   ACTIVE
   EXPIRED
   PENDING
+}
+
+enum BannerPosition {
+  TOP
+  SIDEBAR
+  BOTTOM
 }
